@@ -7,7 +7,10 @@ class IdType (models.Model): #   Model representing an ID type.
     idType_category = models.CharField(max_length=100, unique=True, db_index=True, verbose_name="ID Category")
     idType_number = models.CharField(max_length=100, unique=True, verbose_name="ID Number")
     idType_desc = models.TextField(blank=True, null=True, verbose_name="ID Description")
+    idType_issdate = models.DateField(blank=True, null=True, verbose_name="Issue Date")
+    idType_expdate = models.DateField(blank=True, null=True, verbose_name="Expiry Date")
     idType_isexp = models.BooleanField(default=False, verbose_name="Expired")
+    idType_issauth = models.CharField(max_length=100, blank=True, null=True, verbose_name="Issuing Authority")
     idType_image = models.ImageField(upload_to='images/')
 
     class Meta:
@@ -30,4 +33,3 @@ class IdCredentials (models.Model): #   Model representing ID labels.
     
     def __str__(self):
         return self.idCred_name
-
