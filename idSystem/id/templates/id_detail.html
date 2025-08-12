@@ -1,0 +1,144 @@
+﻿{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .id-card {
+        max-width: 500px;
+        margin: 20px auto;
+        border: 2px solid #004080;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f0f8ff;
+        overflow: hidden;
+    }
+
+    .id-header {
+        background: #004080;
+        color: white;
+        padding: 15px 20px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    .id-body {
+        display: flex;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .id-photo {
+        flex: 0 0 150px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        background: #e6e6e6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+        .id-photo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+    .id-info {
+        flex: 1;
+        font-size: 1rem;
+    }
+
+        .id-info h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #004080;
+        }
+
+    .info-group {
+        margin-bottom: 15px;
+    }
+
+        .info-group strong {
+            display: inline-block;
+            width: 130px;
+            color: #003366;
+        }
+
+    .id-footer {
+        background: #e0e7f8;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+        color: #003366;
+        text-align: center;
+    }
+
+    .id-type {
+        border-top: 1px solid #ccc;
+        padding-top: 15px;
+        margin-top: 15px;
+    }
+
+    .id-type-header {
+        font-weight: 700;
+        color: #002244;
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+        background: #d6e4ff;
+        padding: 6px 12px;
+        border-radius: 5px;
+        display: inline-block;
+    }
+</style>
+
+<div class="id-card">
+    <div class="id-header">
+        ID Details
+    </div>
+    <div class="id-body">
+
+        <div class="id-photo">
+            {% comment %} Show photo if you have one on the credential or first ID type {% endcomment %}
+            {% if credential.idCred_photo %}
+            <img src="{{ credential.idCred_photo.url }}" alt="Photo of {{ credential.idCred_name }}">
+            {% elif credential.id_types.all and credential.id_types.first.idType_image %}
+            <img src="{{ credential.id_types.first.idType_image.url }}" alt="ID Image">
+            {% else %}
+            <span>No Photo</span>
+            {% endif %}
+        </div>
+
+        <div class="id-info">
+            <h3>{{ credential.idCred_name }}</h3>
+            <div class="info-group"><strong>Address:</strong> {{ credential.idCred_addr }}</div>
+            <div class="info-group"><strong>Date of Birth:</strong> {{ credential.idCred_dob }}</div>
+
+            {% if credential.id_types.all %}
+            {% for idtype in credential.id_types.all %}
+            <div class="id-type">
+                <div class="id-type-header">{{ idtype.idType_kind|capfirst }}</div>
+                <div><strong>Category:</strong> {{ idtype.idType_category }}</div>
+                <div><strong>Description:</strong> {{ idtype.idType_desc }}</div>
+                <div><strong>Number:</strong> {{ idtype.idType_number }}</div>
+                <div><strong>Issued By:</strong> {{ idtype.idType_issauth }}</div>
+                <div><strong>Issue Date:</strong> {{ idtype.idType_issdate }}</div>
+                <div><strong>Expiry Date:</strong> {{ idtype.idType_expdate }}</div>
+                <div><strong>Has Expiry:</strong> {{ idtype.idType_isexp|yesno:"Yes,No" }}</div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p><em>No ID Types linked to this credential.</em></p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="id-footer">
+        <a href="{% url 'id:id-edit' credential.pk %}">Edit</a> |
+        <a href="{% url 'id:id-delete' credential.pk %}">Delete</a> |
+        <a href="{% url 'id:id-list' %}">Back to List</a>
+    </div>
+</div>
+
+{% endblock %}

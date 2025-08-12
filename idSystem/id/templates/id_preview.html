@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  /* Include your ID card styles here, same as id_detail.html */
+</style>
+
+<h1>ID Preview</h1>
+
+<form method="post" enctype="multipart/form-data"
+      action="{% if edit_mode %}{% url 'id:id-edit' credential_pk %}{% else %}{% url 'id:id-add' %}{% endif %}">
+  {% csrf_token %}
+
+  <div class="id-card">
+    <div class="id-header">
+      ID Preview
+    </div>
+    <div class="id-body">
+
+      <div class="id-photo">
+        {% if credential.idCred_photo %}
+          <img src="{{ credential.idCred_photo.url }}" alt="Photo Preview">
+        {% elif id_types and id_types.0.idType_image %}
+          <img src="{{ id_types.0.idType_image.url }}" alt="ID Image Preview">
+        {% else %}
+          <span>No Photo</span>
+        {% endif %}
+      </div>
+
+      <div class="id-info">
+        <h3>{{ credential.idCred_name }}</h3>
+        <div><strong>Address:</strong> {{ credential.idCred_addr }}</div>
+        <div><strong>Date of Birth:</strong> {{ credential.idCred_dob }}</div>
+
+        {% if id_types %}
+          {% for idtype in id_types %}
+          <div class="id-type">
+            <div class="id-type-header">{{ idtype.idType_kind|capfirst }}</div>
+            <div><strong>Category:</strong> {{ idtype.idType_category }}</div>
+            <div><strong>Description:</strong> {{ idtype.idType_desc }}</div>
+            <div><strong>Number:</strong> {{ idtype.idType_number }}</div>
+            <div><strong>Issued By:</strong> {{ idtype.idType_issauth }}</div>
+            <div><strong>Issue Date:</strong> {{ idtype.idType_issdate }}</div>
+            <div><strong>Expiry Date:</strong> {{ idtype.idType_expdate }}</div>
+            <div><strong>Has Expiry:</strong> {{ idtype.idType_isexp|yesno:"Yes,No" }}</div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <p><em>No ID Types to preview.</em></p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="id-footer">
+      <button type="submit" name="confirm_save">Confirm & Save</button>
+      <a href="{% if edit_mode %}{% url 'id:id-edit' credential_pk %}{% else %}{% url 'id:id-add' %}{% endif %}">Back to {% if edit_mode %}Edit{% else %}Add{% endif %}</a>
+    </div>
+  </div>
+
+  {# Hidden inputs to pass form data back #}
+  <input type="hidden" name="idCred_name" value="{{ credential.idCred_name }}">
+  <input type="hidden" name="idCred_addr" value="{{ credential.idCred_addr }}">
+  <input type="hidden" name="idCred_dob" value="{{ credential.idCred_dob }}">
+
+  {% if id_types %}
+    {% with idtype=id_types.0 %}
+      <input type="hidden" name="idType_kind" value="{{ idtype.idType_kind }}">
+      <input type="hidden" name="idType_category" value="{{ idtype.idType_category }}">
+      <input type="hidden" name="idType_desc" value="{{ idtype.idType_desc }}">
+      <input type="hidden" name="idType_number" value="{{ idtype.idType_number }}">
+      <input type="hidden" name="idType_issauth" value="{{ idtype.idType_issauth }}">
+      <input type="hidden" name="idType_issdate" value="{{ idtype.idType_issdate }}">
+      <input type="hidden" name="idType_expdate" value="{{ idtype.idType_expdate }}">
+      <input type="hidden" name="idType_isexp" value="{{ idtype.idType_isexp }}">
+    {% endwith %}
+  {% endif %}
+
+</form>
+{% endblock %}

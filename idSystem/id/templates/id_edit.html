@@ -1,0 +1,139 @@
+﻿{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f9fafb;
+        color: #333;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: #2c3e50;
+    }
+
+    form {
+        max-width: 700px;
+        margin: 0 auto 3rem auto;
+        background: #fff;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    fieldset {
+        border: none;
+        margin-bottom: 1.5rem;
+    }
+
+    legend {
+        font-weight: 600;
+        font-size: 1.25rem;
+        color: #34495e;
+        margin-bottom: 0.75rem;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 0.25rem;
+    }
+
+    label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+        color: #555;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="file"],
+    select,
+    textarea {
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        transition: border-color 0.2s ease-in-out;
+    }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+    .form-error {
+        color: #e74c3c;
+        font-size: 0.9rem;
+        margin-top: -0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    button {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        margin-right: 1rem;
+        transition: background-color 0.3s ease;
+    }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+    a.cancel-btn {
+        font-size: 1rem;
+        color: #666;
+        text-decoration: none;
+        padding: 0.75rem 1rem;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        transition: background-color 0.3s ease;
+    }
+
+        a.cancel-btn:hover {
+            background-color: #f0f0f0;
+            border-color: #aaa;
+        }
+</style>
+
+<h1>Edit ID</h1>
+
+<form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+
+    <fieldset>
+        <legend>Owner Information</legend>
+        {% for field in cred_form %}
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+        <div class="form-error">{{ field.errors|striptags }}</div>
+        {% endif %}
+        {% endfor %}
+    </fieldset>
+
+    <fieldset>
+        <legend>ID Details</legend>
+        {% for field in type_form %}
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+        <div class="form-error">{{ field.errors|striptags }}</div>
+        {% endif %}
+        {% endfor %}
+    </fieldset>
+
+    <button type="submit" name="save">Save Changes</button>
+    <button type="submit" name="preview">Preview</button>
+    <a href="{% url 'id:id-detail' credential.pk %}" class="cancel-btn">Cancel</a>
+</form>
+{% endblock %}

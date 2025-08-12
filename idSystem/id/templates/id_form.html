@@ -1,0 +1,63 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h2>{{ action }} ID Credential</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <fieldset>
+        <legend>Personal Information</legend>
+        {{ cred_form.as_p }}
+    </fieldset>
+
+    <fieldset>
+        <legend>ID Type Information</legend>
+
+        <p>
+            {{ type_form.idType_kind.label_tag }}<br>
+            {{ type_form.idType_kind }}
+        </p>
+
+        <div id="type-fields">
+            <p>{{ type_form.idType_category.label_tag }}<br>{{ type_form.idType_category }}</p>
+            <p>{{ type_form.idType_number.label_tag }}<br>{{ type_form.idType_number }}</p>
+            <p>{{ type_form.idType_desc.label_tag }}<br>{{ type_form.idType_desc }}</p>
+            <p>{{ type_form.idType_issdate.label_tag }}<br>{{ type_form.idType_issdate }}</p>
+
+            <p id="exp-field">{{ type_form.idType_expdate.label_tag }}<br>{{ type_form.idType_expdate }}</p>
+            <p>{{ type_form.idType_isexp.label_tag }}<br>{{ type_form.idType_isexp }}</p>
+
+            <p id="issauth-field">{{ type_form.idType_issauth.label_tag }}<br>{{ type_form.idType_issauth }}</p>
+            <p>{{ type_form.idType_image.label_tag }}<br>{{ type_form.idType_image }}</p>
+        </div>
+    </fieldset>
+
+    <div style="margin-top: 20px;">
+        <button type="submit" formaction="{% url 'id:id-preview' %}">Preview</button>
+        <button type="submit">Save</button>
+        <a href="{% url 'id:id-list' %}" class="button">Cancel</a>
+    </div>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const kindField = document.getElementById("id_idType_kind");
+        const expField = document.getElementById("exp-field");
+        const issauthField = document.getElementById("issauth-field");
+
+        function toggleFields() {
+            const kind = kindField.value;
+
+            expField.style.display = (kind === 'license') ? 'block' : 'none';
+
+            issauthField.style.display = (kind === 'passport' || kind === 'nationalid') ? 'block' : 'none';
+        }
+
+        if (kindField) {
+            kindField.addEventListener('change', toggleFields);
+            toggleFields();  
+        }
+    });
+</script>
+{% endblock %}
