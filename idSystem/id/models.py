@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 ID_KIND_CHOICES = [
     ('passport', 'Passport'),
@@ -8,6 +9,7 @@ ID_KIND_CHOICES = [
 
 class IdCredentials(models.Model): 
     slug = models.SlugField(max_length=250)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='id_types', verbose_name="Owner", default=1)
     idCred_name = models.CharField(max_length=100, unique=True, verbose_name="Name")
     idCred_addr = models.TextField(blank=True, null=True, verbose_name="Address")
     idCred_dob = models.DateField(blank=True, null=True, verbose_name="Date of Birth")
@@ -31,21 +33,10 @@ class IdType(models.Model):
     idType_issauth = models.CharField(max_length=100, blank=True, null=True, verbose_name="Issuing Authority")
     idType_image = models.ImageField(upload_to='images/')
     
-    idType_kind = models.CharField(
-        max_length=20,
-        choices=ID_KIND_CHOICES,
-        default='passport',
-        verbose_name="ID Kind"
-    )
+    idType_kind = models.CharField(max_length=20, choices=ID_KIND_CHOICES, default='passport', verbose_name="ID Kind")
 
-    owner = models.ForeignKey(
-        'IdCredentials',
-        on_delete=models.CASCADE,
-        related_name='id_types',
-        verbose_name="Owner",
-        default=1
-    )
-
+    owner = models.ForeignKey('IdCredentials', on_delete=models.CASCADE, related_name='id_types', verbose_name="Owner", default=1)
+    
     class Meta:
         verbose_name = "ID Type"
         verbose_name_plural = "ID Types"
