@@ -3,7 +3,7 @@
 {% block content %}
 <style>
     .id-card {
-        max-width: 500px;
+        max-width: 1100px;
         margin: 20px auto;
         border: 2px solid #004080;
         border-radius: 10px;
@@ -30,7 +30,7 @@
     }
 
     .id-photo {
-        flex: 0 0 150px;
+        flex: 0 0 350px;
         border-radius: 8px;
         border: 1px solid #ccc;
         background: #e6e6e6;
@@ -62,7 +62,7 @@
     }
 
         .info-group strong {
-            display: inline-block;
+            display: block;
             width: 130px;
             color: #003366;
         }
@@ -125,7 +125,7 @@
                 <div><strong>Issued By:</strong> {{ idtype.idType_issauth }}</div>
                 <div><strong>Issue Date:</strong> {{ idtype.idType_issdate }}</div>
                 <div><strong>Expiry Date:</strong> {{ idtype.idType_expdate }}</div>
-                <div><strong>Has Expiry:</strong> {{ idtype.idType_isexp|yesno:"Yes,No" }}</div>
+                <div><strong>Expired:</strong> {{ idtype.idType_isexp|yesno:"Yes,No" }}</div>
             </div>
             {% endfor %}
             {% else %}

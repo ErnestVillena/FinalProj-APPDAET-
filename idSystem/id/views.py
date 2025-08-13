@@ -1,20 +1,24 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from .models import IdCredentials, IdType
 from .forms import IdCredentialsForm, IdTypeForm
 
+@login_required
 def id_list(request):
     search_query = request.GET.get('q', '')
     selected_category = request.GET.get('category', 'all')
 
     id_types = IdType.objects.all()
-    credentials = IdCredentials.objects.all()
+    #credentials = IdCredentials.objects.all()
+    #id_types = IdType.objects.filter(owner_id=request.user.id)
+    credentials = IdCredentials.objects.filter(owner_id=request.user.id)
 
     if search_query:
         credentials = credentials.filter(idCred_name__icontains=search_query)
 
     if selected_category != 'all':
-        credentials = credentials.filter(id_type__id=selected_category)
+        credentials = credentials.filter(id_types__id=selected_category)
 
     context = {
         'credentials': credentials,

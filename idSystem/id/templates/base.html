@@ -66,18 +66,17 @@
         <a class="navbar-brand" href="/">Home</a>
         <a class="navbar-brand" href="/about">About</a>
         <a class="navbar-brand" href="/id">ID</a>
-        {% if user.is_authenticated %}
-            <a class="navbar-brand" href="{% url 'users:logout' %}">Logout</a>
-        {% else %}
-            <a class="navbar-brand" href="/users/login">Login</a>
-        {% endif %}
         <a class="navbar-brand" href="/users/register">Register</a>
-        
         {% if user.is_authenticated %}
         <ul class="navbar-nav ms-auto">
+            <a class="navbar-brand" href="{% url 'users:logout' %}">Logout</a>
             <li class="nav-link navbar-brand">
                 {{user}}
             </li>
+        </ul>
+        {% else %}
+        <ul class="navbar-nav ms-auto"></ul>
+            <a class="navbar-brand" href="/users/login">Login</a>
         </ul>
         {% endif %}
     </nav>
