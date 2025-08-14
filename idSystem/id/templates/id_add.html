@@ -123,6 +123,11 @@
         {% endfor %}
     </fieldset>
 
+    <script>
+        var name = "{{ user.id }}";
+        document.getElementById("id_owner").value = name;
+    </script>
+
     <fieldset>
         <legend>ID Type Details</legend>
         {% for field in type_form %}

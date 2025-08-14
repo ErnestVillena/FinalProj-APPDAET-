@@ -10,7 +10,7 @@ ID_KIND_CHOICES = [
 class IdCredentials(models.Model): 
     slug = models.SlugField(max_length=250)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='id_types', verbose_name="Owner", default=1)
-    idCred_name = models.CharField(max_length=100, unique=True, verbose_name="Name")
+    idCred_name = models.CharField(max_length=100, verbose_name="Name")
     idCred_addr = models.TextField(blank=True, null=True, verbose_name="Address")
     idCred_dob = models.DateField(blank=True, null=True, verbose_name="Date of Birth")
 

@@ -118,7 +118,7 @@
             {% if credential.id_types.all %}
             {% for idtype in credential.id_types.all %}
             <div class="id-type">
-                <div class="id-type-header">{{ idtype.idType_kind|capfirst }}</div>
+                <div class="id-type-header">{{ idtype.idType_kind|upper }}</div>
                 <div><strong>Category:</strong> {{ idtype.idType_category }}</div>
                 <div><strong>Description:</strong> {{ idtype.idType_desc }}</div>
                 <div><strong>Number:</strong> {{ idtype.idType_number }}</div>

@@ -4,8 +4,11 @@ from .models import IdCredentials, IdType
 class IdCredentialsForm(forms.ModelForm):
     class Meta:
         model = IdCredentials
-        fields = ['idCred_name', 'idCred_addr', 'idCred_dob']
+        fields = ['owner', 'idCred_name', 'idCred_addr', 'idCred_dob']
 
+        widgets = {
+            'owner': forms.TextInput(attrs={'class': 'form-control', 'value':'', 'id': 'id_owner', 'type': 'hidden'})
+        }
 
 class IdTypeForm(forms.ModelForm):
     class Meta:
